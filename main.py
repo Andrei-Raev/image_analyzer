@@ -12,9 +12,10 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFont
 # --== [DEFINES] ==--
 aa_scale_cof = 8  # Коэффициент масштабирования, применяемый в рендере изображения с гистограммами и пр. Убирает "ступенчатый" эффект
 font_name = "font.otf"  # Файл шрифта, которым будут сделаны подписи на изображениях
-palette_depth = 15
-palette_color_expand = 50
-bg_color = (90, 90, 90)
+palette_depth = 15  # глубина палитры
+palette_color_expand = 50  # Чувствительность палитры (не рекомендуется сильно понижать)
+bg_color = (90, 90, 90)  # Цвет заднего фона в изображении с цветовым анализом
+bw_threshold = 3  # Порог черного и белого для одноименной карты (больше число - больше область)
 
 # --== [INPUTS] ==--
 path = input("Введите путь к файлу (желательно .png)\n")  # Изображение, которое будет проанализировано
@@ -88,9 +89,9 @@ for y in range(height):
         else:
             all_colors.update({t: 1})
 
-        if sum((r, g, b)) <= 3:
+        if sum((r, g, b)) <= bw_threshold:
             white_black_holes_mask_pix[x, y] = (28, 28, 128, 256) if sl_grad(x, y, .5) else (3, 3, 250, 255)
-        elif sum((r, g, b)) >= 255 * 3:
+        elif sum((r, g, b)) >= 255 * bw_threshold:
             white_black_holes_mask_pix[x, y] = (250, 3, 3, 255) if sl_grad(x, y, .5) else (118, 28, 28, 256)
 
         h, s, v = colorsys.rgb_to_hsv(r, g, b)
