@@ -46,6 +46,8 @@ except FileExistsError:
     os.mkdir(dir_path)
 
 img.save(dir_path + "/original.png")  # Сохранение оригинального изображения
+img.transpose(Image.FLIP_LEFT_RIGHT).save(
+    dir_path + "/original_flipped.png")  # Сохранение оригинального изображения, отраженного по горизонтали
 
 pixels = img.load()  # Загрузка изображения попиксельно
 
